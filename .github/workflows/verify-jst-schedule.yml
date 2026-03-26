@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   schedule:
     # JST 00:25 every day
-    - cron: '25 21 * * *'
+    - cron: '50 21 * * *'
       timezone: 'Asia/Tokyo'
 
 jobs:
