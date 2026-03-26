@@ -1,0 +1,17 @@
+name: Verify JST Schedule
+
+on:
+  workflow_dispatch:
+  schedule:
+    # JST 00:25 every day
+    - cron: '25 21 * * *'
+      timezone: 'Asia/Tokyo'
+
+jobs:
+  verify-jst-schedule:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show current JST time
+        run: |
+          echo "JST now: $(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M:%S %Z (%z)')"
+          echo "Triggered by: ${{ github.event_name }}"
