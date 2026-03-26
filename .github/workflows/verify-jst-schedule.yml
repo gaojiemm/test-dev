@@ -3,8 +3,8 @@ name: Verify JST Schedule
 on:
   workflow_dispatch:
   schedule:
-    # JST 00:25 every day
-    - cron: '50 21 * * *'
+    # JST 22:12 every day
+    - cron: '12 22 * * *'
       timezone: 'Asia/Tokyo'
 
 jobs:
