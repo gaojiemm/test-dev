@@ -1,8 +1,10 @@
 name: Generate Weekly Changelog
 
 on:
-  schedule:
-    - cron: '0 0 * * 1'   # UTC Mon 00:00 = JST Mon 09:00
+  push:
+    branches:
+      - changlogskill
+      - main
   workflow_dispatch:
 
 jobs:
