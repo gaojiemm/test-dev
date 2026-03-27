@@ -1,0 +1,13 @@
+{
+  "name": "github-changelog-skill-demo",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "github-changelog": "node scripts/github-changelog.mjs last-week"
+  },
+  "dependencies": {
+    "cheerio": "^1.1.2",
+    "dayjs": "^1.11.13",
+    "fast-xml-parser": "^4.5.3"
+  }
+}

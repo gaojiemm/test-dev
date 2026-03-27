@@ -1,0 +1,31 @@
+name: Generate Weekly Changelog
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'   # UTC Mon 00:00 = JST Mon 09:00
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - run: npm install
+
+      - run: npm run github-changelog
+
+      - name: Commit and push report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add work/log/
+          git diff --cached --quiet || git commit -m "docs: weekly changelog $(date +%Y%m%d)"
+          git push
