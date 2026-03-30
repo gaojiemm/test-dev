@@ -23,3 +23,32 @@
     Run1 --> Run2
     style Run1 fill:transparent,stroke:#555,stroke-dasharray: 5 5
     style Run2 fill:transparent,stroke:#555,stroke-dasharray: 5 5
+
+
+```mermaid
+flowchart TD
+
+    subgraph 缓存来源
+        A[subosito/flutter-action<br/>cache: true]
+        B[公司 pipeline<br/>soe-devops-mobile-pipeline]
+        C[actions/cache]
+        D[缓存 .dart_tool<br/>构建状态]
+        A --> C
+        B --> C
+        C --> D
+    end
+
+    subgraph 第二次运行
+        E[恢复 cache]
+        F[.dart_tool 存在 ✅<br/>dylib 不存在 ❌]
+        G[flutter build ios]
+        H[Flutter 读取 .dart_tool]
+        I[误判：已经 build]
+        J[跳过编译]
+        K[dylib 没生成]
+        L[lipo 查找 dylib]
+        M[💥 报错]
+        
+        E --> F --> G --> H --> I --> J --> K --> L --> M
+    end
+```
