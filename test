@@ -1,4 +1,4 @@
-         graph TD
+看         graph TD
     subgraph Run1 ["【第一次运行 (成功)】"]
         direction TB
         A[干净环境] --> B[checkout 代码]
@@ -51,4 +51,37 @@ flowchart TD
         
         E --> F --> G --> H --> I --> J --> K --> L --> M
     end
+```
+```mermaid
+flowchart LR
+
+    subgraph 缓存问题起点
+        A[使用 cache<br/>恢复 .dart_tool]
+    end
+
+    A --> B[Flutter 读取构建状态]
+
+    B --> C{是否已构建？}
+
+    C -->|是| D[跳过部分构建步骤]
+
+    %% iOS 路径
+    D --> IOS1[iOS: FFI hooks]
+    IOS1 --> IOS2[❗被跳过]
+    IOS2 --> IOS3[objective_c.dylib 未生成]
+    IOS3 --> IOS4[lipo / 链接阶段]
+    IOS4 --> IOS5[💥 报错]
+
+    %% Android 路径
+    D --> AND1[Android: Gradle 构建]
+    AND1 --> AND2[检测到产物缺失]
+    AND2 --> AND3[自动重新编译]
+    AND3 --> AND4[生成 libapp.so / .dex]
+    AND4 --> AND5[APK / AAB 打包]
+    AND5 --> AND6[✅ 成功]
+
+    %% 正常路径（无缓存）
+    C -->|否| N1[正常完整构建]
+    N1 --> N2[iOS + Android 都生成完整产物]
+    N2 --> N3[✅ 成功]
 ```
