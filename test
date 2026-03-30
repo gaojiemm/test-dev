@@ -1,0 +1,25 @@
+         graph TD
+    subgraph Run1 ["【第一次运行 (成功)】"]
+        direction TB
+        A[干净环境] --> B[checkout 代码]
+        B --> C["flutter build<br>Android + iOS"]
+        C --> D["生成 .dart_tool (构建状态记录)<br>生成 build/.../apk & dylib (真实产物)"]
+        D --> E["保存 cache (⚠️问题点)<br>key: flutter-cache"]
+        E --> F("✅ 成功")
+        
+        style F fill:none,stroke:none
+    end
+
+    subgraph Run2 ["【第二次运行 (失败)】"]
+        direction TB
+        G[使用同一个 cache key] --> H[恢复 cache]
+        H --> I[".dart_tool (旧状态) 存在 ✅<br>build/.../dylib 不存在 ❌"]
+        I --> J["flutter build"]
+        
+        J -- "❗ Flutter 判断: 已经 build 过 (被误导)" --> K["Android 构建路径<br>👉 Gradle 自动重新编译<br>👉 重新生成 APK<br>👉 ✅ 成功"]
+        K --> L["iOS 构建路径<br>👉 跳过关键编译步骤<br>👉 dylib 没生成<br>👉 lipo 查找 dylib<br>👉 💥 报错"]
+    end
+
+    Run1 --> Run2
+    style Run1 fill:transparent,stroke:#555,stroke-dasharray: 5 5
+    style Run2 fill:transparent,stroke:#555,stroke-dasharray: 5 5
